@@ -1,0 +1,30 @@
+body {
+    background-color: darkgreen;
+    color: white;
+}
+
+#bannerCanvas {
+    padding: .5em;
+    display: flex;
+}
+
+#resultsCanvas {
+    display: flex;
+    width: auto;
+    flex-wrap: wrap;
+    width: 60%;
+}
+
+.result-card {
+    border: solid black 1px;
+    padding: 1em;
+    min-width: fit-content;
+    background-color: lightgreen;
+    color: black;
+    position: relative;
+}
+
+#addNote {
+    height: 15em;
+    width: 25%;
+}
