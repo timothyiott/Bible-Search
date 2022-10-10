@@ -41,7 +41,7 @@ async function searchVerse(){
     let response = await fetch(url);
     let data = await response.json();
 
-    console.log(data[0])
+    console.log(data)
 
     emptyRsults()
     createResultCard(data, resultsCanvas)
@@ -72,4 +72,12 @@ function createResultCard(data, parent) {
 
     resultsCard.append(resultReference);
     parent.appendChild(resultsCard);
+
+    for(let i = 0; i < data.length; i++){
+        if(data[i].note_content){
+            let resultNotes = document.createElement('p');
+            resultNotes.textContent = data[i].note_content
+            resultReference.append(resultNotes)
+        }
+    };
 }

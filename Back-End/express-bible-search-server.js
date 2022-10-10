@@ -39,7 +39,7 @@ app.get('/search/:book/:chapter/:verse', (req, res) => {
     let chapter = req.params.chapter;
     let verse = req.params.verse;
 
-    client.query(`SELECT * FROM kjv_bible WHERE book = ${books.indexOf(book) + 1} AND chapter = ${chapter} AND verse = ${verse};`)
+    client.query(`SELECT * FROM kjv_bible LEFT OUTER JOIN notes ON kjv_bible.verse_id=notes.verse_id WHERE book = ${books.indexOf(book) + 1} AND chapter = ${chapter} AND verse = ${verse} ORDER BY kjv_bible.verse_id ASC;`)
     .then(data => {
         res.send(data.rows)
     })

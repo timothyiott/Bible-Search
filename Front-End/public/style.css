@@ -28,3 +28,7 @@ body {
     height: 15em;
     width: 25%;
 }
+
+p {
+    padding-left: 3em;
+}
