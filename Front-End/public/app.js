@@ -46,7 +46,8 @@ async function search(){
 
 async function searchVerse(book, chapter, verse){
     let url = `${baseUrl}/search/${book}/${chapter}/${verse}`
-   
+    console.log(url)
+
     let response = await fetch(url);
     let data = await response.json();
 
