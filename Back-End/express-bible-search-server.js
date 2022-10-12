@@ -43,6 +43,7 @@ app.get('/search/:book/:chapter/:verse', (req, res) => {
     .then(data => {
         res.send(data.rows)
     })
+    console.log(data.rows)
 })
 
 app.get('/search/:book/:chapter', (req, res) => {
@@ -53,6 +54,7 @@ app.get('/search/:book/:chapter', (req, res) => {
     .then(data => {
         res.send(data.rows)
     })
+    console.log(data.rows)
 })
 
 app.post('/add-note/:verse_id', (req, res) => {
@@ -66,6 +68,7 @@ app.post('/add-note/:verse_id', (req, res) => {
     .then(data => {
         res.send(data.rows)
     })
+    console.log(data.rows)
 })
 
 app.get('/delete/:note_id' , (req, res) => {
@@ -75,6 +78,7 @@ app.get('/delete/:note_id' , (req, res) => {
     .then(data => {
         res.send(data.rows)
     })
+    console.log(data.rows)
 })
 
 app.use((req, res, er) => {

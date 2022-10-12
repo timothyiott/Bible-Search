@@ -40,6 +40,8 @@ async function search(){
     } else if(book && chapter && !verse){
         searchChapter(book, chapter)
     }
+
+    console.log(book, chapter, verse)
 }
 
 async function searchVerse(book, chapter, verse){
@@ -85,6 +87,8 @@ async function submitNote(verseId){
         body: JSON.stringify({"value":`${addNoteInput.value}`})
     });
     const content = await rawResponse.json();
+
+    console.log(content)
 
     search()
 }
