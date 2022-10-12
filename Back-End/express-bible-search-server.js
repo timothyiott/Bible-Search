@@ -10,7 +10,7 @@ const client = new Client({
 app.use(express.json());
 app.use(cors());
 
-const PORT = 8000
+const PORT = process.env.PORT
 
 client.connect();
 
