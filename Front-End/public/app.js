@@ -1,6 +1,7 @@
 let resultsCanvas = document.getElementById('resultsCanvas');
 let searchInput = document.getElementById('searchField');
-let baseUrl = 'http://localhost:8000'
+// let baseUrl = 'http://localhost:8000'
+let baseUrl = 'https://bible-search-api.onrender.com'
 
 var books = [
     'Genesis',         'Exodus',          'Leviticus',     'Numbers',
@@ -21,19 +22,6 @@ var books = [
     '2 Peter',         '1 John',          '2 John',        '3 John',
     'Jude',            'Revelation'
 ];
-
-// resultsCanvas.addEventListener('mousedown', e => {
-//     let note = e.target.parentNode;
-//     if(e.target.classList.contains('overlay')) {
-        
-//         // selected = note.firstChild.textContent;
-
-//         // for (let i = 0; i < resultsCanvas.childNodes.length; i++) {
-//         //     resultsCanvas.childNodes[i].style.border = 'solid black 2px'
-//         // }
-//         note.style.border = 'solid black 10px'
-//     }
-// })
 
 async function search(){
     let reference = searchInput.value;
@@ -100,7 +88,6 @@ async function submitNote(verseId){
 
     search()
 }
-
 
 function emptyResults() {
     while (resultsCanvas.firstChild) {

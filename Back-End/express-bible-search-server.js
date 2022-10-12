@@ -4,7 +4,7 @@ let cors = require('cors');
 let app = express();
 
 const client = new Client({
-    connectionString: "postgresql://postgres:docker@127.0.0.1:5432/kjv_bible_and_notes_db"
+    connectionString: "postgres://kjv_bible_and_notes_db_user:0HgtdxdWqVFtgSld4FUda2g6ZOTO3sYZ@dpg-cd3dj82rrk0ajgo2n7a0-a.oregon-postgres.render.com/kjv_bible_and_notes_db"
 })
 
 app.use(express.json());
