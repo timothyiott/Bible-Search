@@ -22,7 +22,20 @@ var books = [
     'Jude',            'Revelation'
 ];
 
-async function searchVerse(){
+// resultsCanvas.addEventListener('mousedown', e => {
+//     let note = e.target.parentNode;
+//     if(e.target.classList.contains('overlay')) {
+        
+//         // selected = note.firstChild.textContent;
+
+//         // for (let i = 0; i < resultsCanvas.childNodes.length; i++) {
+//         //     resultsCanvas.childNodes[i].style.border = 'solid black 2px'
+//         // }
+//         note.style.border = 'solid black 10px'
+//     }
+// })
+
+async function search(){
     let reference = searchInput.value;
     let splitReferenceBook = reference.split(' ')
     let splitReferenceChapterVerse = splitReferenceBook[1].split(':')
@@ -30,54 +43,108 @@ async function searchVerse(){
     let book = splitReferenceBook[0]
     let chapter = splitReferenceChapterVerse[0]
     let verse = splitReferenceChapterVerse[1]
-    
-    let url = `${baseUrl}/search/${book}/${chapter}/${verse}`
 
     if(reference === ""){
         alert('Enter a scripture reference.')
         return;
+    } else if(book && chapter && verse){
+        searchVerse(book, chapter, verse)
+    } else if(book && chapter && !verse){
+        searchChapter(book, chapter)
     }
+}
+
+async function searchVerse(book, chapter, verse){
+    let url = `${baseUrl}/search/${book}/${chapter}/${verse}`
    
     let response = await fetch(url);
     let data = await response.json();
 
     console.log(data)
 
-    emptyRsults()
-    createResultCard(data, resultsCanvas)
+    emptyResults()
+    populateResults(data)
 }
 
-function submitNote(){
-    
+async function searchChapter(book, chapter){
+    let url = `${baseUrl}/search/${book}/${chapter}`
+
+    let response = await fetch(url);
+    let data = await response.json();
+
+    console.log(data)
+
+    emptyResults()
+    populateResults(data)
+}
+
+async function submitNote(verseId){
+    let addNoteInput = document.getElementById('addNote');
+    if (!addNoteInput.value) {
+        alert("You need to type in a note before pressing the submit button.")
+        return;
+    }
+    console.log(addNoteInput.value)
+    let body = {"value":`${addNoteInput.value}`};
+    let url = `${baseUrl}/add-note/${verseId}`
+
+    const rawResponse = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"value":`${addNoteInput.value}`})
+    });
+    const content = await rawResponse.json();
+
+    search()
 }
 
 
-function emptyRsults() {
+function emptyResults() {
     while (resultsCanvas.firstChild) {
         resultsCanvas.removeChild(resultsCanvas.firstChild);
     }
 }
 
-function createResultCard(data, parent) {
-    //data = {id:val, age:val, kind:val, name:val}
+function populateResults(data) {
 
-    // let overlay = document.createElement("div");
-    // overlay.classList.add("overlay");
-
-    let resultsCard = document.createElement("span");
-    resultsCard.classList.add("result-card");
-
-    let resultReference = document.createElement("h3");
-    resultReference.textContent = `${books[data[0].book - 1]} ${data[0].chapter}:${data[0].verse} ${data[0].text}`;
-
-    resultsCard.append(resultReference);
-    parent.appendChild(resultsCard);
-
+    let html = ''
     for(let i = 0; i < data.length; i++){
-        if(data[i].note_content){
-            let resultNotes = document.createElement('p');
-            resultNotes.textContent = data[i].note_content
-            resultReference.append(resultNotes)
-        }
-    };
+        html = html.concat(`
+        <div class="result-card">
+            <h3>${books[data[i].book - 1]} ${data[i].chapter}:${data[i].verse} ${data[i].text}</h3>
+            ${evaluateNoteContent(data, i)}
+        </div>`)
+    }
+
+    $('#resultsCanvas').append(html)
+
+    $('#notes').empty()
+    $('#notes').append(`
+        <div id="notes">
+            <h2>Add notes here for ${books[data[0].book - 1]} ${data[0].chapter}:${data[0].verse}</h2>
+            <input type="text" id="addNote">
+            <button type="button" id="submitNote" onclick="submitNote(${data[0].verse_id})">Submit</button>
+        </div>`)
+}
+
+function evaluateNoteContent(data, i){
+    if(data[i].note_content){
+        return `<p>${data[i].note_content}</p>
+        <button type="button" id="searchButton" onclick="deleteNote(${data[i].note_id})">Delete Note</button>`
+    } else {
+        return "";
+    }
+}
+
+async function deleteNote(note_id){
+    let url = `${baseUrl}/delete/${note_id}`
+   
+    let response = await fetch(url);
+    let data = await response.json();
+
+    console.log(data)
+    search()
 }

@@ -1,5 +1,5 @@
 let express =  require("express");
-let {Client} = require('pg');
+let {Client, ClientBase} = require('pg');
 let cors = require('cors');
 let app = express();
 
@@ -39,10 +39,46 @@ app.get('/search/:book/:chapter/:verse', (req, res) => {
     let chapter = req.params.chapter;
     let verse = req.params.verse;
 
-    client.query(`SELECT * FROM kjv_bible LEFT OUTER JOIN notes ON kjv_bible.verse_id=notes.verse_id WHERE book = ${books.indexOf(book) + 1} AND chapter = ${chapter} AND verse = ${verse} ORDER BY kjv_bible.verse_id ASC;`)
+    client.query(`SELECT kjv_bible.verse_id, kjv_bible.book, kjv_bible.chapter, kjv_bible.verse, kjv_bible.text, notes.note_id, notes.note_content FROM kjv_bible LEFT OUTER JOIN notes ON kjv_bible.verse_id=notes.verse_id WHERE book = ${books.indexOf(book) + 1} AND chapter = ${chapter} AND verse = ${verse} ORDER BY kjv_bible.verse_id ASC;`)
     .then(data => {
         res.send(data.rows)
     })
+})
+
+app.get('/search/:book/:chapter', (req, res) => {
+    let book = req.params.book;
+    let chapter = req.params.chapter;
+
+    client.query(`SELECT kjv_bible.verse_id, kjv_bible.book, kjv_bible.chapter, kjv_bible.verse, kjv_bible.text, notes.note_id, notes.note_content FROM kjv_bible LEFT OUTER JOIN notes ON kjv_bible.verse_id=notes.verse_id WHERE book = ${books.indexOf(book) + 1} AND chapter = ${chapter} ORDER BY kjv_bible.verse_id ASC;`)
+    .then(data => {
+        res.send(data.rows)
+    })
+})
+
+app.post('/add-note/:verse_id', (req, res) => {
+    console.log(req.body)
+    console.log(req.params.verse_id)
+    let verse_id = req.params.verse_id;
+    let note_content = req.body.value
+    console.log(note_content)
+
+    client.query(`INSERT INTO notes (verse_id, note_content) VALUES (${verse_id}, N'${note_content}');`)
+    .then(data => {
+        res.send(data.rows)
+    })
+})
+
+app.get('/delete/:note_id' , (req, res) => {
+    let note_id = req.params.note_id
+
+    client.query(`DELETE FROM notes WHERE note_id = ${note_id}`)
+    .then(data => {
+        res.send(data.rows)
+    })
+})
+
+app.use((req, res, er) => {
+    res.status(404).send(er);
 })
 
 app.listen(PORT, console.log(`listening on port ${PORT}`));

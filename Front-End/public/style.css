@@ -10,18 +10,19 @@ body {
 
 #resultsCanvas {
     display: flex;
-    width: auto;
+    float: left;
     flex-wrap: wrap;
     width: 60%;
+    padding-right: 2em;
 }
 
 .result-card {
     border: solid black 1px;
     padding: 1em;
-    min-width: fit-content;
     background-color: lightgreen;
     color: black;
     position: relative;
+    width: 100%;
 }
 
 #addNote {
@@ -31,4 +32,14 @@ body {
 
 p {
     padding-left: 3em;
+}
+
+.overlay {
+    width : 100%;
+    height : 100%;
+    z-index : 110;
+    opacity : .01;
+    top: 0;
+    left: 0;
+    position: absolute;
 }
