@@ -41,12 +41,13 @@ app.get('/search/:book/:chapter/:verse', (req, res) => {
 
     client.query(`SELECT kjv_bible.verse_id, kjv_bible.book, kjv_bible.chapter, kjv_bible.verse, kjv_bible.text, notes.note_id, notes.note_content FROM kjv_bible LEFT OUTER JOIN notes ON kjv_bible.verse_id=notes.verse_id WHERE book = ${books.indexOf(book) + 1} AND chapter = ${chapter} AND verse = ${verse} ORDER BY kjv_bible.verse_id ASC;`)
     .then(data => {
+        console.log(data.rows)
         res.send(data.rows)
     })
     .catch(error => {
         throw error;
     })
-    console.log(data.rows)
+
 })
 
 app.get('/search/:book/:chapter', (req, res) => {
@@ -55,6 +56,7 @@ app.get('/search/:book/:chapter', (req, res) => {
 
     client.query(`SELECT kjv_bible.verse_id, kjv_bible.book, kjv_bible.chapter, kjv_bible.verse, kjv_bible.text, notes.note_id, notes.note_content FROM kjv_bible LEFT OUTER JOIN notes ON kjv_bible.verse_id=notes.verse_id WHERE book = ${books.indexOf(book) + 1} AND chapter = ${chapter} ORDER BY kjv_bible.verse_id ASC;`)
     .then(data => {
+        console.log(data.rows)
         res.send(data.rows)
     })
     .catch(error => {
@@ -72,12 +74,12 @@ app.post('/add-note/:verse_id', (req, res) => {
 
     client.query(`INSERT INTO notes (verse_id, note_content) VALUES (${verse_id}, N'${note_content}');`)
     .then(data => {
+        console.log(data.rows)
         res.send(data.rows)
     })
     .catch(error => {
         throw error;
     })
-    console.log(data.rows)
 })
 
 app.get('/delete/:note_id' , (req, res) => {
@@ -85,12 +87,12 @@ app.get('/delete/:note_id' , (req, res) => {
 
     client.query(`DELETE FROM notes WHERE note_id = ${note_id}`)
     .then(data => {
+        console.log(data.rows)
         res.send(data.rows)
     })
     .catch(error => {
         throw error;
     })
-    console.log(data.rows)
 })
 
 app.use((req, res, er) => {
