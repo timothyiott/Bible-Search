@@ -4,7 +4,7 @@ let cors = require('cors');
 let app = express();
 
 const client = new Client({
-    connectionString: "postgres://kjv_bible_and_notes_db_user:0HgtdxdWqVFtgSld4FUda2g6ZOTO3sYZ@dpg-cd3dj82rrk0ajgo2n7a0-a.oregon-postgres.render.com/kjv_bible_and_notes_db"
+    connectionString: "postgres://kjv_bible_and_notes_db_user:0HgtdxdWqVFtgSld4FUda2g6ZOTO3sYZ@dpg-cd3dj82rrk0ajgo2n7a0-a.oregon-postgres.render.com/kjv_bible_and_notes_db?ssl=true"
 })
 
 app.use(express.json());
@@ -39,13 +39,15 @@ app.get('/search/:book/:chapter/:verse', (req, res) => {
     let chapter = req.params.chapter;
     let verse = req.params.verse;
 
+    console.log(books.indexOf(book) + 1, chapter, verse)
+
     client.query(`SELECT kjv_bible.verse_id, kjv_bible.book, kjv_bible.chapter, kjv_bible.verse, kjv_bible.text, notes.note_id, notes.note_content FROM kjv_bible LEFT OUTER JOIN notes ON kjv_bible.verse_id=notes.verse_id WHERE book = ${books.indexOf(book) + 1} AND chapter = ${chapter} AND verse = ${verse} ORDER BY kjv_bible.verse_id ASC;`)
     .then(data => {
         console.log(data.rows)
         res.send(data.rows)
     })
     .catch(error => {
-        throw error;
+        res.send(error);
     })
 
 })
@@ -60,9 +62,8 @@ app.get('/search/:book/:chapter', (req, res) => {
         res.send(data.rows)
     })
     .catch(error => {
-        throw error;
+        res.send(error);
     })
-    console.log(data.rows)
 })
 
 app.post('/add-note/:verse_id', (req, res) => {
@@ -78,7 +79,7 @@ app.post('/add-note/:verse_id', (req, res) => {
         res.send(data.rows)
     })
     .catch(error => {
-        throw error;
+        res.send(error);
     })
 })
 
@@ -91,7 +92,7 @@ app.get('/delete/:note_id' , (req, res) => {
         res.send(data.rows)
     })
     .catch(error => {
-        throw error;
+        res.send(error);
     })
 })
 
