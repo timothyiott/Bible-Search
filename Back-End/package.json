@@ -4,7 +4,9 @@
   "description": "",
   "main": "express-bible-search-server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "nodemon express-bible-search-server.js",
+    "start:deploy": "node express-bible-search-server.js"
   },
   "author": "",
   "license": "ISC",
