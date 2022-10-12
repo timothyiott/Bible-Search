@@ -1,11 +1,22 @@
-body {
-    background-color: darkgreen;
+html {
+    background-image: url("./bible.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
     color: white;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+h1, h2 {
+    color:rgb(232, 139, 46);
+    text-shadow: 2px 2px black;
 }
 
 #bannerCanvas {
     padding: .5em;
-    display: flex;
+    align-content: center;
+    text-align: center;
 }
 
 #resultsCanvas {
@@ -19,7 +30,7 @@ body {
 .result-card {
     border: solid black 1px;
     padding: 1em;
-    background-color: lightgreen;
+    background-color: rgb(232, 139, 46);
     color: black;
     position: relative;
     width: 100%;
